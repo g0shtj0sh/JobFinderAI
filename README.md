@@ -68,14 +68,6 @@ Ou lancer le fichier "lancer_app.py"
 
 ---
 
-## ☁️ Déploiement sur Streamlit Cloud
-
-1. Poussez ce repo sur votre propre GitHub
-2. Rendez-vous sur [https://streamlit.io/cloud](https://streamlit.io/cloud) et connectez votre repo
-3. Déployez en un clic !
-
----
-
 ## 🔑 Configuration OpenRouteService (itinéraire)
 
 Pour activer le calcul d'itinéraire, créez un compte gratuit sur [openrouteservice.org](https://openrouteservice.org/sign-up/) et récupérez votre clé API. Renseignez-la dans la barre latérale de l'application.
@@ -99,7 +91,7 @@ Pour activer le calcul d'itinéraire, créez un compte gratuit sur [openrouteser
 
 ## 📣 Contribuer / Questions
 - Suggestions, bugs, idées ? Ouvrez une issue ou une pull request !
-- Pour toute question, contactez-moi via GitHub.
+- Pour toute question, contactez-moi via mon sitweb.
 
 ---
 
