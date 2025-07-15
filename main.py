@@ -319,15 +319,23 @@ else:
             # Calcul itinéraire
             minutes, km = None, None
             trajet_message = ""
+            ors_error = ""
             if st.session_state.config.get("ors_api_key") and st.session_state.config.get("user_address") and row["location"]:
-                minutes, km = get_travel_time(st.session_state.config["ors_api_key"], st.session_state.config["user_address"], row["location"])
-                if minutes is not None and km is not None:
-                    trajet_message = f"🗺️ Trajet estimé : {minutes} min ({km} km)"
-                else:
-                    trajet_message = "❌ Itinéraire non disponible pour cette offre. Vérifiez l'adresse de départ, l'adresse de l'offre ou la connexion API."
+                try:
+                    minutes, km = get_travel_time(st.session_state.config["ors_api_key"], st.session_state.config["user_address"], row["location"])
+                    if minutes is not None and km is not None:
+                        trajet_message = f"🗺️ Trajet estimé : {minutes} min ({km} km)"
+                    else:
+                        trajet_message = "❌ Itinéraire non disponible pour cette offre. Vérifiez l'adresse de départ, l'adresse de l'offre ou la connexion API."
+                        ors_error = f"Erreur OpenRouteService : Impossible de calculer l'itinéraire entre '{st.session_state.config['user_address']}' et '{row['location']}'. Vérifiez que les deux adresses sont précises et reconnues."
+                except Exception as e:
+                    trajet_message = "❌ Erreur lors du calcul d'itinéraire."
+                    ors_error = f"Détail de l'erreur OpenRouteService : {e}"
             else:
                 trajet_message = "ℹ️ Renseignez une adresse de départ et une clé API OpenRouteService pour obtenir l'itinéraire."
             st.info(trajet_message)
+            if ors_error:
+                st.warning(ors_error)
             cols = st.columns([2,1,1,1])
             with cols[0]:
                 if st.button("🌐 Ouvrir l'offre", key=f"open_{row['id']}"):
