@@ -44,19 +44,27 @@
 ## ⚡ Installation locale
 
 1. **Clonez le repo**
-   ```bash
-   git clone https://github.com/votre-utilisateur/JobFinderAI.git
-   cd JobFinderAI
-   ```
+
+```bash
+git clone https://github.com/votre-utilisateur/JobFinderAI.git
+cd JobFinderAI
+```
+
 2. **Installez les dépendances**
-   ```bash
-   pip install -r requirements.txt
-   ```
+
+```bash
+python requirements.py
+```
+Ou lancer le fichier "requirements.py"
+
 3. **Lancez l'application**
-   ```bash
-   streamlit run main.py
-   ```
-4. Ouvrez [http://localhost:8501](http://localhost:8501) dans votre navigateur !
+
+```bash
+python lancer_app.py
+```
+Ou lancer le fichier "lancer_app.py"
+
+4. Ouvrez [http://localhost:8501](http://localhost:8501) dans votre navigateur si celui si ne s'ouvre pas automatiquement quand vous lancer le "lancer_app.py" !
 
 ---
 
