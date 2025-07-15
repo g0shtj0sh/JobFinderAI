@@ -23,7 +23,9 @@
 
 ## 🖥️ Démo
 
-![Aperçu de l'application](screenshot/screen.png)
+<div align="center">
+  <img src="screenshot/screen.png" alt="Aperçu de l'application" width="800"/>
+</div>
 
 ---
 
