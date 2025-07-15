@@ -205,8 +205,13 @@ def reset_config():
 
 with st.sidebar:
     st.header("Paramètres de recherche")
-    st.text("(Laissez vide pour tout)")
-    st.text_input("Adresse de départ (pour itinéraire)", key="user_address", on_change=lambda: st.session_state.config.update({"user_address": st.session_state.user_address}))
+    st.text_input(
+        "Adresse de départ (pour itinéraire)",
+        key="user_address",
+        placeholder="Ex : 10 rue de Paris, Lyon",
+        help="Indiquez une adresse précise (ex : 10 rue de Paris, Lyon) pour calculer l'itinéraire."
+        , on_change=lambda: st.session_state.config.update({"user_address": st.session_state.user_address})
+    )
     st.text_input("Clé API OpenRouteService", key="ors_api_key", value=st.session_state.config.get("ors_api_key", ""), on_change=lambda: st.session_state.config.update({"ors_api_key": st.session_state.ors_api_key}))
     st.text_area("Mots-clés (un par ligne)", key="keywords", value="\n".join(st.session_state.config.get("keywords", [])), on_change=lambda: st.session_state.config.update({"keywords": st.session_state.keywords.splitlines()}))
     st.text_input("Localisation", key="location", value=st.session_state.config.get("location", ""), on_change=lambda: st.session_state.config.update({"location": st.session_state.location}))
@@ -313,10 +318,16 @@ else:
             st.markdown(f"**Description :**\n{row['description'][:1000]}...")
             # Calcul itinéraire
             minutes, km = None, None
+            trajet_message = ""
             if st.session_state.config.get("ors_api_key") and st.session_state.config.get("user_address") and row["location"]:
                 minutes, km = get_travel_time(st.session_state.config["ors_api_key"], st.session_state.config["user_address"], row["location"])
-            if minutes is not None and km is not None:
-                st.info(f"🗺️ Trajet estimé : {minutes} min ({km} km)")
+                if minutes is not None and km is not None:
+                    trajet_message = f"🗺️ Trajet estimé : {minutes} min ({km} km)"
+                else:
+                    trajet_message = "❌ Itinéraire non disponible pour cette offre. Vérifiez l'adresse de départ, l'adresse de l'offre ou la connexion API."
+            else:
+                trajet_message = "ℹ️ Renseignez une adresse de départ et une clé API OpenRouteService pour obtenir l'itinéraire."
+            st.info(trajet_message)
             cols = st.columns([2,1,1,1])
             with cols[0]:
                 if st.button("🌐 Ouvrir l'offre", key=f"open_{row['id']}"):
