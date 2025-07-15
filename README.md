@@ -23,7 +23,7 @@
 
 ## 🖥️ Démo
 
-*Ajoutez ici un screenshot ou un GIF de l'interface pour maximiser l'impact !*
+![Aperçu de l'application](screenshot/screen.png)
 
 ---
 
