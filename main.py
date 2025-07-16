@@ -274,23 +274,33 @@ with st.sidebar:
     st.number_input("Résultats/clé", min_value=1, max_value=50, value=st.session_state.config.get("results_per_keyword", 20), key="results_per_keyword", on_change=lambda: st.session_state.config.update({"results_per_keyword": st.session_state.results_per_keyword}))
     st.number_input("Offres publiées depuis (jours)", min_value=1, max_value=30, value=st.session_state.config.get("days_old", 7), key="days_old", on_change=lambda: st.session_state.config.update({"days_old": st.session_state.days_old}))
     st.markdown("---")
-    # Boutons horizontaux stylés
-    st.markdown('<div class="custom-btn-row">', unsafe_allow_html=True)
-    colA, colB, colC = st.columns([1,1,1])
-    save_clicked = export_clicked = reset_clicked = False
-    with colA:
-        save_clicked = st.button("Save")
-    with colB:
-        export_clicked = st.download_button("Export", data=json.dumps(st.session_state.config, ensure_ascii=False, indent=2), file_name="config_jobspy.json", help="Exporter la configuration JSON")
-    with colC:
-        reset_clicked = st.button("Reset")
-    st.markdown('</div>', unsafe_allow_html=True)
-    # Affichage des messages de succès/alerte sous les boutons, sur toute la largeur
-    if save_clicked:
+    # Boutons horizontaux stylés en HTML custom
+    st.markdown('''
+    <div style="display: flex; gap: 24px; justify-content: center; margin-bottom: 16px;">
+        <form method="post">
+            <button name="custom_save" type="submit" style="min-width:180px; padding:0.7em 1.2em; font-size:1.1em; font-weight:600; border-radius:8px; border:1px solid #444; background:#18191A; color:#fff; cursor:pointer;">Save</button>
+        </form>
+        <form method="post">
+            <button name="custom_export" type="submit" style="min-width:180px; padding:0.7em 1.2em; font-size:1.1em; font-weight:600; border-radius:8px; border:1px solid #444; background:#18191A; color:#fff; cursor:pointer;">Export</button>
+        </form>
+        <form method="post">
+            <button name="custom_reset" type="submit" style="min-width:180px; padding:0.7em 1.2em; font-size:1.1em; font-weight:600; border-radius:8px; border:1px solid #444; background:#18191A; color:#fff; cursor:pointer;">Reset</button>
+        </form>
+    </div>
+    ''', unsafe_allow_html=True)
+
+    # Gestion des callbacks custom
+    if st.session_state.get('custom_save'):
         save_config()
         st.success("Paramètres sauvegardés !")
-    if reset_clicked:
+        st.session_state['custom_save'] = False
+    if st.session_state.get('custom_export'):
+        st.download_button("Télécharger la config", data=json.dumps(st.session_state.config, ensure_ascii=False, indent=2), file_name="config_jobspy.json")
+        st.session_state['custom_export'] = False
+    if st.session_state.get('custom_reset'):
         reset_config()
+        st.success("Configuration réinitialisée !")
+        st.session_state['custom_reset'] = False
     # Import config en-dessous, centré
     st.markdown("")
     st.markdown("<div style='text-align:center; margin-top: 10px; margin-bottom: 10px;'><b>Importer une config JSON</b></div>", unsafe_allow_html=True)
