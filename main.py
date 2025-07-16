@@ -273,16 +273,22 @@ with st.sidebar:
     # Boutons horizontaux stylés
     st.markdown('<div class="custom-btn-row">', unsafe_allow_html=True)
     colA, colB, colC = st.columns([1,1,1])
+    save_clicked = export_clicked = reset_clicked = False
     with colA:
-        if st.button("Sauvegarder"):
-            save_config()
-            st.success("Paramètres sauvegardés !")
+        save_clicked = st.button("Sauvegarder")
     with colB:
-        export_config()
+        export_clicked = st.button("Exporter", help="Exporter la configuration JSON")
     with colC:
-        if st.button("Réinitialiser"):
-            reset_config()
+        reset_clicked = st.button("Réinitialiser")
     st.markdown('</div>', unsafe_allow_html=True)
+    # Affichage des messages de succès/alerte sous les boutons, sur toute la largeur
+    if save_clicked:
+        save_config()
+        st.success("Paramètres sauvegardés !")
+    if export_clicked:
+        export_config()
+    if reset_clicked:
+        reset_config()
     # Import config en-dessous, centré
     st.markdown("")
     st.markdown("<div style='text-align:center; margin-top: 10px; margin-bottom: 10px;'><b>Importer une config JSON</b></div>", unsafe_allow_html=True)
