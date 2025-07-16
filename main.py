@@ -274,33 +274,14 @@ with st.sidebar:
     st.number_input("Résultats/clé", min_value=1, max_value=50, value=st.session_state.config.get("results_per_keyword", 20), key="results_per_keyword", on_change=lambda: st.session_state.config.update({"results_per_keyword": st.session_state.results_per_keyword}))
     st.number_input("Offres publiées depuis (jours)", min_value=1, max_value=30, value=st.session_state.config.get("days_old", 7), key="days_old", on_change=lambda: st.session_state.config.update({"days_old": st.session_state.days_old}))
     st.markdown("---")
-    # Boutons horizontaux stylés en HTML custom
-    st.markdown('''
-    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 16px;">
-        <form method="post">
-            <button name="custom_save" type="submit" style="min-width:90px; max-width:90px; width:90px; padding:0.3em 0.5em; font-size:0.95em; font-weight:600; border-radius:6px; border:1px solid #444; background:#18191A; color:#fff; cursor:pointer;">Save</button>
-        </form>
-        <form method="post">
-            <button name="custom_export" type="submit" style="min-width:90px; max-width:90px; width:90px; padding:0.3em 0.5em; font-size:0.95em; font-weight:600; border-radius:6px; border:1px solid #444; background:#18191A; color:#fff; cursor:pointer;">Export</button>
-        </form>
-        <form method="post">
-            <button name="custom_reset" type="submit" style="min-width:90px; max-width:90px; width:90px; padding:0.3em 0.5em; font-size:0.95em; font-weight:600; border-radius:6px; border:1px solid #444; background:#18191A; color:#fff; cursor:pointer;">Reset</button>
-        </form>
-    </div>
-    ''', unsafe_allow_html=True)
-
-    # Gestion des callbacks custom
-    if st.session_state.get('custom_save'):
+    # Boutons verticaux natifs Streamlit, larges
+    if st.button("Save", use_container_width=True):
         save_config()
         st.success("Paramètres sauvegardés !")
-        st.session_state['custom_save'] = False
-    if st.session_state.get('custom_export'):
-        st.download_button("Télécharger la config", data=json.dumps(st.session_state.config, ensure_ascii=False, indent=2), file_name="config_jobspy.json")
-        st.session_state['custom_export'] = False
-    if st.session_state.get('custom_reset'):
+    st.download_button("Export", data=json.dumps(st.session_state.config, ensure_ascii=False, indent=2), file_name="config_jobspy.json", use_container_width=True, help="Exporter la configuration JSON")
+    if st.button("Reset", use_container_width=True):
         reset_config()
         st.success("Configuration réinitialisée !")
-        st.session_state['custom_reset'] = False
     # Import config en-dessous, centré
     st.markdown("")
     st.markdown("<div style='text-align:center; margin-top: 10px; margin-bottom: 10px;'><b>Importer une config JSON</b></div>", unsafe_allow_html=True)
