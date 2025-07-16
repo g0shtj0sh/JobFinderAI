@@ -223,7 +223,7 @@ st.markdown(
         font-weight: 600;
         border-radius: 6px;
         padding: 0.5em 0.7em;
-        font-size: 0.60em;
+        font-size: 0.40em;
     }
     </style>
     """,
