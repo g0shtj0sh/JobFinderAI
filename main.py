@@ -276,15 +276,15 @@ with st.sidebar:
     st.markdown("---")
     # Boutons horizontaux stylés en HTML custom
     st.markdown('''
-    <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 16px;">
+    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 16px;">
         <form method="post">
-            <button name="custom_save" type="submit" style="min-width:120px; max-width:120px; width:120px; padding:0.4em 0.7em; font-size:1em; font-weight:600; border-radius:7px; border:1px solid #444; background:#18191A; color:#fff; cursor:pointer;">Save</button>
+            <button name="custom_save" type="submit" style="min-width:90px; max-width:90px; width:90px; padding:0.3em 0.5em; font-size:0.95em; font-weight:600; border-radius:6px; border:1px solid #444; background:#18191A; color:#fff; cursor:pointer;">Save</button>
         </form>
         <form method="post">
-            <button name="custom_export" type="submit" style="min-width:120px; max-width:120px; width:120px; padding:0.4em 0.7em; font-size:1em; font-weight:600; border-radius:7px; border:1px solid #444; background:#18191A; color:#fff; cursor:pointer;">Export</button>
+            <button name="custom_export" type="submit" style="min-width:90px; max-width:90px; width:90px; padding:0.3em 0.5em; font-size:0.95em; font-weight:600; border-radius:6px; border:1px solid #444; background:#18191A; color:#fff; cursor:pointer;">Export</button>
         </form>
         <form method="post">
-            <button name="custom_reset" type="submit" style="min-width:120px; max-width:120px; width:120px; padding:0.4em 0.7em; font-size:1em; font-weight:600; border-radius:7px; border:1px solid #444; background:#18191A; color:#fff; cursor:pointer;">Reset</button>
+            <button name="custom_reset" type="submit" style="min-width:90px; max-width:90px; width:90px; padding:0.3em 0.5em; font-size:0.95em; font-weight:600; border-radius:6px; border:1px solid #444; background:#18191A; color:#fff; cursor:pointer;">Reset</button>
         </form>
     </div>
     ''', unsafe_allow_html=True)
