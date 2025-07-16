@@ -215,7 +215,8 @@ st.markdown(
         margin-bottom: 10px;
     }
     .custom-btn-row button {
-        width: 100%;
+        min-width: 140px !important;
+        max-width: 100%;
         white-space: nowrap;
         font-weight: 600;
         border-radius: 6px;
