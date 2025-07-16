@@ -9,6 +9,7 @@ from jobspy.linkedin import LinkedIn
 from jobspy.google import Google
 from jobspy.model import ScraperInput, Site, Country, DescriptionFormat, JobType
 import requests
+import time
 
 # ---------------------- CONFIGURATION ----------------------
 DB_PATH = "jobs.sqlite3"
@@ -169,6 +170,33 @@ def get_travel_time(api_key, from_address, to_address):
     except Exception as e:
         return None, None
 
+# ---------------------- NOMINATIM (OpenStreetMap) ----------------------
+def get_company_full_address(company, city, api_key=None):
+    """
+    Recherche l'adresse complète d'une entreprise via Nominatim (OpenStreetMap).
+    """
+    if not company or not city:
+        return None
+    try:
+        url = "https://nominatim.openstreetmap.org/search"
+        params = {
+            "q": f"{company}, {city}, France",
+            "format": "json",
+            "addressdetails": 1,
+            "limit": 1
+        }
+        headers = {"User-Agent": "JobFinderAI/1.0"}
+        if api_key:
+            params["key"] = api_key
+        resp = requests.get(url, params=params, headers=headers)
+        time.sleep(1)  # Respecte la politique Nominatim (1 requête/sec)
+        data = resp.json()
+        if data and len(data) > 0:
+            return data[0]["display_name"]
+        return None
+    except Exception as e:
+        return None
+
 # ---------------------- INTERFACE STREAMLIT ----------------------
 st.set_page_config(page_title="🔎 Recherche Job / Alternance", layout="wide")
 st.title("🔎 Recherche Job / Alternance")
@@ -316,18 +344,32 @@ else:
             st.markdown(f"**Source :** {row['source']}")
             st.markdown(f"**Statut :** {row['status']}")
             st.markdown(f"**Description :**\n{row['description'][:1000]}...")
+            # Recherche adresse complète si besoin
+            adresse_utilisee = None
+            if hasattr(row, 'company_addresses') and row.get('company_addresses'):
+                adresse_utilisee = row['company_addresses']
+            else:
+                # On tente de trouver l'adresse via Nominatim
+                company = row['company']
+                city = row['location'].split(",")[0] if row['location'] else None
+                api_key = None
+                adresse_utilisee = get_company_full_address(company, city, api_key)
+            if adresse_utilisee:
+                st.markdown(f"**Adresse utilisée pour l'itinéraire :** {adresse_utilisee}")
+            else:
+                st.markdown("**Adresse utilisée pour l'itinéraire :** Non trouvée")
             # Calcul itinéraire
             minutes, km = None, None
             trajet_message = ""
             ors_error = ""
-            if st.session_state.config.get("ors_api_key") and st.session_state.config.get("user_address") and row["location"]:
+            if st.session_state.config.get("ors_api_key") and st.session_state.config.get("user_address") and adresse_utilisee:
                 try:
-                    minutes, km = get_travel_time(st.session_state.config["ors_api_key"], st.session_state.config["user_address"], row["location"])
+                    minutes, km = get_travel_time(st.session_state.config["ors_api_key"], st.session_state.config["user_address"], adresse_utilisee)
                     if minutes is not None and km is not None:
                         trajet_message = f"🗺️ Trajet estimé : {minutes} min ({km} km)"
                     else:
                         trajet_message = "❌ Itinéraire non disponible pour cette offre. Vérifiez l'adresse de départ, l'adresse de l'offre ou la connexion API."
-                        ors_error = f"Erreur OpenRouteService : Impossible de calculer l'itinéraire entre '{st.session_state.config['user_address']}' et '{row['location']}'. Vérifiez que les deux adresses sont précises et reconnues."
+                        ors_error = f"Erreur OpenRouteService : Impossible de calculer l'itinéraire entre '{st.session_state.config['user_address']}' et '{adresse_utilisee}'. Vérifiez que les deux adresses sont précises et reconnues."
                 except Exception as e:
                     trajet_message = "❌ Erreur lors du calcul d'itinéraire."
                     ors_error = f"Détail de l'erreur OpenRouteService : {e}"
