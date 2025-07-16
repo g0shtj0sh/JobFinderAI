@@ -210,20 +210,22 @@ st.markdown(
     /* Boutons custom */
     .custom-btn-row {
         display: flex;
-        gap: 10px;
-        justify-content: space-between;
+        gap: 20px;
+        justify-content: center;
         margin-bottom: 10px;
     }
     .custom-btn-row .stButton > button,
     .custom-btn-row .stDownloadButton > button {
-        min-width: 140px !important;
-        max-width: 140px !important;
-        width: 140px !important;
+        min-width: 180px !important;
+        max-width: 180px !important;
+        width: 180px !important;
         white-space: nowrap;
         font-weight: 600;
-        border-radius: 6px;
-        padding: 0.5em 0.7em;
-        font-size: 0.40em;
+        border-radius: 8px;
+        padding: 0.7em 1.2em;
+        font-size: 1.1em;
+        margin: 0 auto;
+        display: block;
     }
     </style>
     """,
