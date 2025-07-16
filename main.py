@@ -277,11 +277,11 @@ with st.sidebar:
     colA, colB, colC = st.columns([1,1,1])
     save_clicked = export_clicked = reset_clicked = False
     with colA:
-        save_clicked = st.button("Sauvegarder")
+        save_clicked = st.button("Sauver")
     with colB:
         export_clicked = st.download_button("Exporter", data=json.dumps(st.session_state.config, ensure_ascii=False, indent=2), file_name="config_jobspy.json", help="Exporter la configuration JSON")
     with colC:
-        reset_clicked = st.button("Réinitialiser")
+        reset_clicked = st.button("Reset")
     st.markdown('</div>', unsafe_allow_html=True)
     # Affichage des messages de succès/alerte sous les boutons, sur toute la largeur
     if save_clicked:
