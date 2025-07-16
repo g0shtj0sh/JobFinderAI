@@ -214,9 +214,11 @@ st.markdown(
         justify-content: space-between;
         margin-bottom: 10px;
     }
-    .custom-btn-row button {
+    .custom-btn-row .stButton > button,
+    .custom-btn-row .stDownloadButton > button {
         min-width: 140px !important;
-        max-width: 100%;
+        max-width: 140px !important;
+        width: 140px !important;
         white-space: nowrap;
         font-weight: 600;
         border-radius: 6px;
@@ -277,7 +279,7 @@ with st.sidebar:
     with colA:
         save_clicked = st.button("Sauvegarder")
     with colB:
-        export_clicked = st.button("Exporter", help="Exporter la configuration JSON")
+        export_clicked = st.download_button("Exporter", data=json.dumps(st.session_state.config, ensure_ascii=False, indent=2), file_name="config_jobspy.json", help="Exporter la configuration JSON")
     with colC:
         reset_clicked = st.button("Réinitialiser")
     st.markdown('</div>', unsafe_allow_html=True)
@@ -285,8 +287,6 @@ with st.sidebar:
     if save_clicked:
         save_config()
         st.success("Paramètres sauvegardés !")
-    if export_clicked:
-        export_config()
     if reset_clicked:
         reset_config()
     # Import config en-dessous, centré
