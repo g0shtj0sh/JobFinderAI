@@ -286,6 +286,7 @@ with st.sidebar:
     st.markdown("")
     st.markdown("<div style='text-align:center; margin-top: 10px; margin-bottom: 10px;'><b>Importer une config JSON</b></div>", unsafe_allow_html=True)
     import_config()
+    st.markdown("<span style='font-size:0.95em; color:#aaa;'>Après import, cliquez sur <b>Save</b> pour appliquer les paramètres.</span>", unsafe_allow_html=True)
     st.markdown("---")
     if st.button("🔄 Scraper de nouvelles offres"):
         with st.spinner("Scraping en cours..."):
