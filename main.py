@@ -19,9 +19,7 @@ DEFAULT_CONFIG = {
     "country": "FRANCE",
     "distance": 30,
     "results_per_keyword": 20,
-    "days_old": 7,
-    "ors_api_key": "",
-    "user_address": ""
+    "days_old": 7
 }
 
 # ---------------------- BASE DE DONNÉES ----------------------
@@ -233,14 +231,7 @@ def reset_config():
 
 with st.sidebar:
     st.header("Paramètres de recherche")
-    st.text_input(
-        "Adresse de départ (pour itinéraire)",
-        key="user_address",
-        placeholder="Ex : 10 rue de Paris, Lyon",
-        help="Indiquez une adresse précise (ex : 10 rue de Paris, Lyon) pour calculer l'itinéraire."
-        , on_change=lambda: st.session_state.config.update({"user_address": st.session_state.user_address})
-    )
-    st.text_input("Clé API OpenRouteService", key="ors_api_key", value=st.session_state.config.get("ors_api_key", ""), on_change=lambda: st.session_state.config.update({"ors_api_key": st.session_state.ors_api_key}))
+    # Suppression des champs itinéraire dans la sidebar
     st.text_area("Mots-clés (un par ligne)", key="keywords", value="\n".join(st.session_state.config.get("keywords", [])), on_change=lambda: st.session_state.config.update({"keywords": st.session_state.keywords.splitlines()}))
     st.text_input("Localisation", key="location", value=st.session_state.config.get("location", ""), on_change=lambda: st.session_state.config.update({"location": st.session_state.location}))
     st.selectbox("Pays", options=[c.name for c in Country], key="country", index=list(Country).index(Country[st.session_state.config.get("country", "FRANCE")]), on_change=lambda: st.session_state.config.update({"country": st.session_state.country}))
@@ -344,40 +335,19 @@ else:
             st.markdown(f"**Source :** {row['source']}")
             st.markdown(f"**Statut :** {row['status']}")
             st.markdown(f"**Description :**\n{row['description'][:1000]}...")
-            # Recherche adresse complète si besoin
+            # Recherche adresse complète si besoin (mais plus de calcul d'itinéraire)
             adresse_utilisee = None
             if hasattr(row, 'company_addresses') and row.get('company_addresses'):
                 adresse_utilisee = row['company_addresses']
             else:
-                # On tente de trouver l'adresse via Nominatim
                 company = row['company']
                 city = row['location'].split(",")[0] if row['location'] else None
-                api_key = None
-                adresse_utilisee = get_company_full_address(company, city, api_key)
+                adresse_utilisee = get_company_full_address(company, city, None)
             if adresse_utilisee:
-                st.markdown(f"**Adresse utilisée pour l'itinéraire :** {adresse_utilisee}")
+                st.markdown(f"**Adresse trouvée (OpenStreetMap) :** {adresse_utilisee}")
             else:
-                st.markdown("**Adresse utilisée pour l'itinéraire :** Non trouvée")
-            # Calcul itinéraire
-            minutes, km = None, None
-            trajet_message = ""
-            ors_error = ""
-            if st.session_state.config.get("ors_api_key") and st.session_state.config.get("user_address") and adresse_utilisee:
-                try:
-                    minutes, km = get_travel_time(st.session_state.config["ors_api_key"], st.session_state.config["user_address"], adresse_utilisee)
-                    if minutes is not None and km is not None:
-                        trajet_message = f"🗺️ Trajet estimé : {minutes} min ({km} km)"
-                    else:
-                        trajet_message = "❌ Itinéraire non disponible pour cette offre. Vérifiez l'adresse de départ, l'adresse de l'offre ou la connexion API."
-                        ors_error = f"Erreur OpenRouteService : Impossible de calculer l'itinéraire entre '{st.session_state.config['user_address']}' et '{adresse_utilisee}'. Vérifiez que les deux adresses sont précises et reconnues."
-                except Exception as e:
-                    trajet_message = "❌ Erreur lors du calcul d'itinéraire."
-                    ors_error = f"Détail de l'erreur OpenRouteService : {e}"
-            else:
-                trajet_message = "ℹ️ Renseignez une adresse de départ et une clé API OpenRouteService pour obtenir l'itinéraire."
-            st.info(trajet_message)
-            if ors_error:
-                st.warning(ors_error)
+                st.markdown("**Adresse trouvée (OpenStreetMap) :** Non trouvée")
+            # Suppression du calcul et affichage d'itinéraire
             cols = st.columns([2,1,1,1])
             with cols[0]:
                 if st.button("🌐 Ouvrir l'offre", key=f"open_{row['id']}"):

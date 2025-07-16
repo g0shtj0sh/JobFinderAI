@@ -15,7 +15,6 @@
 - Scraping automatique multi-plateforme
 - Filtres avancés (statut, entreprise, ville, date, source, mots-clés...)
 - Suivi de candidature (statut, relance, etc.)
-- Calcul d'itinéraire domicile → offre (OpenRouteService)
 - Gestion et export/import de vos paramètres de recherche
 - Interface moderne, responsive, 100% personnalisable
 
@@ -35,9 +34,7 @@
 - **Base de données locale** (SQLite) pour stocker toutes les offres et leur statut
 - **Filtres puissants** : statut, entreprise, ville, date, source, mots-clés, type de poste, distance, etc.
 - **Suivi de candidature** : changez le statut, relancez, archivez
-- **Calcul d'itinéraire** : temps de trajet estimé entre votre adresse et chaque offre (OpenRouteService, clé gratuite)
 - **Gestion des paramètres** : sauvegarde, export, import, réinitialisation
-- **Déploiement facile** sur [Streamlit Cloud](https://streamlit.io/cloud) ou en local
 
 ---
 
@@ -68,17 +65,10 @@ Ou lancer le fichier "lancer_app.py"
 
 ---
 
-## 🔑 Configuration OpenRouteService (itinéraire)
-
-Pour activer le calcul d'itinéraire, créez un compte gratuit sur [openrouteservice.org](https://openrouteservice.org/sign-up/) et récupérez votre clé API. Renseignez-la dans la barre latérale de l'application.
-
----
-
 ## 🛠️ Technologies utilisées
 - [JobSpy](https://github.com/speedyapply/JobSpy) (scraping multi-plateforme)
 - [Streamlit](https://streamlit.io/) (interface web)
 - [SQLite](https://www.sqlite.org/index.html) (base locale)
-- [OpenRouteService](https://openrouteservice.org/) (itinéraire)
 - [Pandas](https://pandas.pydata.org/) (dataframe)
 
 ---
