@@ -196,6 +196,36 @@ def get_company_full_address(company, city, api_key=None):
         return None
 
 # ---------------------- INTERFACE STREAMLIT ----------------------
+# CSS pour sidebar fixe et boutons stylés
+st.markdown(
+    """
+    <style>
+    /* Sidebar non redimensionnable horizontalement */
+    section[data-testid="stSidebar"] {
+        min-width: 350px;
+        max-width: 350px;
+        width: 350px;
+        resize: none !important;
+    }
+    /* Boutons custom */
+    .custom-btn-row {
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+    .custom-btn-row button {
+        width: 100%;
+        white-space: nowrap;
+        font-weight: 600;
+        border-radius: 6px;
+        padding: 0.5em 0.7em;
+        font-size: 1em;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 st.set_page_config(page_title="🔎 Recherche Job / Alternance", layout="wide")
 st.title("🔎 Recherche Job / Alternance")
 
@@ -239,17 +269,19 @@ with st.sidebar:
     st.number_input("Résultats/clé", min_value=1, max_value=50, value=st.session_state.config.get("results_per_keyword", 20), key="results_per_keyword", on_change=lambda: st.session_state.config.update({"results_per_keyword": st.session_state.results_per_keyword}))
     st.number_input("Offres publiées depuis (jours)", min_value=1, max_value=30, value=st.session_state.config.get("days_old", 7), key="days_old", on_change=lambda: st.session_state.config.update({"days_old": st.session_state.days_old}))
     st.markdown("---")
-    # Boutons horizontaux : Sauvegarder | Exporter | Réinitialiser
-    btn_cols = st.columns([1,1,1])
-    with btn_cols[0]:
+    # Boutons horizontaux stylés
+    st.markdown('<div class="custom-btn-row">', unsafe_allow_html=True)
+    colA, colB, colC = st.columns([1,1,1])
+    with colA:
         if st.button("Sauvegarder"):
             save_config()
             st.success("Paramètres sauvegardés !")
-    with btn_cols[1]:
+    with colB:
         export_config()
-    with btn_cols[2]:
+    with colC:
         if st.button("Réinitialiser"):
             reset_config()
+    st.markdown('</div>', unsafe_allow_html=True)
     # Import config en-dessous, centré
     st.markdown("")
     st.markdown("<div style='text-align:center; margin-top: 10px; margin-bottom: 10px;'><b>Importer une config JSON</b></div>", unsafe_allow_html=True)
