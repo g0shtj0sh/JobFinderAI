@@ -200,8 +200,8 @@ def get_company_full_address(company, city, api_key=None):
 st.markdown(
     """
     <style>
-    /* Sidebar non redimensionnable horizontalement */
-    section[data-testid="stSidebar"] {
+    /* Sidebar non redimensionnable horizontalement UNIQUEMENT quand elle est visible */
+    section[data-testid="stSidebar"][aria-expanded="true"] {
         min-width: 350px;
         max-width: 350px;
         width: 350px;
